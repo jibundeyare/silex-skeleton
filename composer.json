@@ -1,0 +1,19 @@
+{
+    "name": "jibundeyare/silex-skeleton",
+    "description": "A pre-configured skeleton for the Silex microframework",
+    "license": "MIT",
+    "type": "project",
+    "require": {
+        "silex/silex": "^2.2",
+        "symfony/var-dumper": "^3.4",
+        "symfony/yaml": "^3.4",
+        "doctrine/dbal": "^2.0",
+        "jibundeyare/silex-php-view": "^1.0",
+        "symfony/debug": "^3.4"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0.x-dev"
+        }
+    }
+}
