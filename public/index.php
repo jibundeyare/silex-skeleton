@@ -1,23 +1,43 @@
 <?php
 
 use Silex\Application;
+use Silex\Provider\DoctrineServiceProvider;
+use Silex\Provider\SessionServiceProvider;
 use SilexPhpView\ViewServiceProvider;
 use Symfony\Component\Debug\Debug;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Yaml\Yaml;
 
-require __DIR__.'/../vendor/autoload.php';
-
-Debug::enable();
-
-$connectionParams = Yaml::parseFile(__DIR__.'/../config/db.yml');
+require_once __DIR__.'/../vendor/autoload.php';
 
 $app = new Application();
 
-// $app['debug'] = true;
+$app['debug'] = true;
+
+if ($app['debug']) {
+    Debug::enable();
+}
+
+$app->error(function (\Exception $e, Request $request, $code) use ($app) {
+    if ($app['debug']) {
+        return;
+    }
+
+    return new Response('We are sorry, but something went terribly wrong.');
+});
+
+$parameters = Yaml::parseFile(__DIR__.'/../config/parameters.yml');
+
+$app->register(new DoctrineServiceProvider(), [
+    'db.options' => $parameters['db'],
+]);
 
 $app->register(new ViewServiceProvider(), [
     'view.path' => __DIR__.'/../templates',
 ]);
+
+$app->register(new SessionServiceProvider());
 
 // home
 $app->get('/', function() use($app) {
